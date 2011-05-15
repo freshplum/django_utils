@@ -1,14 +1,58 @@
 #From Python:
 import string
 from random import choice
+from datetime import datetime, date, timedelta
 
-#From Django:
 from django.test import TestCase
 from django.test.client import Client
+from django.core.exceptions import MiddlewareNotUsed
+from django.db import connection
 
-#From Project:
-from global_utils.misc import *
-from global_utils.manage_html import *
+from misc import *
+from manage_html import *
+
+from django.conf import settings
+
+class TestMiddleware(object):
+	"""
+	Test middleware to print out contents of GET and POST requests
+	"""
+	def __init__(self):
+		if not settings.DEBUG:
+			raise MiddlewareNotUsed
+
+	def process_request(self, request):
+		for post_var in request.POST:
+			print post_var + ": " + request.POST[post_var]
+		return None
+
+	@staticmethod
+	def show_sql(connection, show_all = False):
+		time = 0
+		count = 0
+		for q in connection.queries:
+			if show_all:
+				print q
+				print ""
+			count += 1
+			time += float(q['time'])
+		if count > 0:
+			print "Total Queries: " + str(count)
+			print "Total Time: " + str(time)
+
+	def process_response(self, request, response):
+		TestMiddleware.show_sql(connection, show_all = False)
+		return response
+
+	def process_exception(self, request, exception):
+		import traceback
+		import sys
+		exc_info = sys.exc_info()
+		print "######################## Exception #############################"
+		print '\n'.join(traceback.format_exception(*(exc_info or sys.exc_info())))
+		print "################################################################"
+		#print repr(request)
+		#print "################################################################"
 
 
 ###################

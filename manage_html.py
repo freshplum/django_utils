@@ -1,15 +1,17 @@
-#From Python:
 import re
-from BeautifulSoup import BeautifulSoup, Comment
 
-#From Django:
 from django.utils.safestring import mark_safe
 
+try:
+    from BeautifulSoup import BeautifulSoup, Comment
+except:
+    pass
+    
 def strip(s, all_tags=None):
 	valid_tags = ('strong b a i'.split() if not all_tags else '')
 	valid_attrs = ('href src'.split() if not all_tags else '')
 	soup = BeautifulSoup(s)
-	for comment in soup.findAll(
+	for Comment in soup.findAll(
 		text=lambda text: isinstance(text, Comment)):
 		comment.extract()
 	for tag in soup.findAll(True):
