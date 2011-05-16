@@ -12,7 +12,7 @@ from django.contrib.auth import logout
 from django.template import Template
 
 #From Project:
-from settings import ANON_ID, LOGIN_URL, LOGOUT_URL
+from settings import LOGIN_URL, LOGOUT_URL
 
 #allways use this when rendering templates (it executes required functions) before rendering the template
 #TODO - include these in generic views...
@@ -33,11 +33,7 @@ def template(template_name, locals_dict=None, status=200):
 
     #TODO - THIS SHOULD ALSO CHECK IF USER IS LOGGED IN:
     if locals_dict['request'].user.is_authenticated():
-        if locals_dict['request'].user.id == ANON_ID:
-            logout(locals_dict['request'])
-            return HttpResponseRedirect(urlresolvers.reverse('login'))        
-        else:
-            locals_dict['user'] = locals_dict['request'].user
+        locals_dict['user'] = locals_dict['request'].user
     return render_wrapper(template_name, locals_dict, status=status)
     
 def previous(request):
