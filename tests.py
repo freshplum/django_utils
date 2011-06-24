@@ -12,6 +12,10 @@ from misc import *
 from manage_html import *
 
 from django.conf import settings
+try:
+    SHOW_QUERIES = settings.SHOW_QUERIES
+except AttributeError:
+    SHOW_QUERIES = False
 
 class TestMiddleware(object):
     """
@@ -41,7 +45,7 @@ class TestMiddleware(object):
             print "Total Time: " + str(time)
 
     def process_response(self, request, response):
-        TestMiddleware.show_sql(connection, show_all = False)
+        TestMiddleware.show_sql(connection, show_all = SHOW_QUERIES)
         return response
 
     def process_exception(self, request, exception):
