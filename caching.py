@@ -1,9 +1,16 @@
 from django.core.cache import cache
+from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save, pre_delete
 from django.db.models.query import QuerySet
 from django.db import models
 
+from cachebot.managers import CacheBotManager
+from cachebot.queryset import CachedQuerySet
+
 #Simple GET caching.  Cribbed from http://www.eflorenzano.com/blog/post/drop-dead-simple-django-caching/
+#CacheBot?.
+
+
 
 def key_from_instance(instance):
     opts = instance._meta
@@ -11,11 +18,13 @@ def key_from_instance(instance):
 
 def post_save_cache(sender, instance, **kwargs):
     cache.set(key_from_instance(instance), instance)
-post_save.connect(post_save_cache)
+    #Disconnect until we use SimpleCacheQuerySet
+#post_save.connect(post_save_cache)
 
 def pre_delete_uncache(sender, instance, **kwargs):
     cache.delete(key_from_instance(instance))
-pre_delete.connect(pre_delete_uncache)
+#Disconnect until we use SimpleCacheQuerySet
+#pre_delete.connect(pre_delete_uncache)
 
 class SimpleCacheQuerySet(QuerySet):
     def filter(self, *args, **kwargs):
@@ -31,13 +40,27 @@ class SimpleCacheQuerySet(QuerySet):
             if obj == None:
                 res = super(SimpleCacheQuerySet, self).filter(*args, **kwargs)
                 cache.set(key, res)
-                print "set cache %s / %s" % (key, res)
                 return res
             else:
-                print "got cache %s / %s" % (key, obj)
                 self._result_cache = [obj]
         return super(SimpleCacheQuerySet, self).filter(*args, **kwargs)
 
 class SimpleCacheManager(models.Manager):
     def get_query_set(self):
         return SimpleCacheQuerySet(self.model)
+
+class CountCacheQuerySet(QuerySet):
+    def count(self):
+        opts = self.model._meta
+        key = slugify(unicode(self.query))
+        cache_qs = cache.get(key)
+        if cache_qs != None:
+            return cache_qs
+        if cache_qs == None:
+            qs = super(CountCacheQuerySet, self).count()
+            cache.set(key, qs)
+            return qs
+
+class CacheCountManager(models.Manager):
+    def get_query_set(self):
+        return CountCacheQuerySet(self.model)
