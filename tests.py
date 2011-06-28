@@ -2,6 +2,8 @@
 import string
 from random import choice
 from datetime import datetime, date, timedelta
+import logging
+logger = logging.getLogger(__name__)
 
 from django.test import TestCase
 from django.test.client import Client
@@ -27,7 +29,7 @@ class TestMiddleware(object):
 
     def process_request(self, request):
         for post_var in request.POST:
-            print post_var + ": " + request.POST[post_var]
+            logger.info('%s: %s' % (post_var, request.POST[post_var]))
         return None
 
     @staticmethod
@@ -36,13 +38,12 @@ class TestMiddleware(object):
         count = 0
         for q in connection.queries:
             if show_all:
-                print q
-                print ""
+                logger.info('%s\n' % q)
             count += 1
             time += float(q['time'])
         if count > 0:
-            print "Total Queries: " + str(count)
-            print "Total Time: " + str(time)
+            logger.info('Total Queries: %s' % str(count))
+            logger.info('Total Time: %s' % str(time))
 
     def process_response(self, request, response):
         TestMiddleware.show_sql(connection, show_all = SHOW_QUERIES)
@@ -52,11 +53,11 @@ class TestMiddleware(object):
         import traceback
         import sys
         exc_info = sys.exc_info()
-        print "######################## Exception #############################"
+        print '######################## Exception #############################'
         print '\n'.join(traceback.format_exception(*(exc_info or sys.exc_info())))
-        print "################################################################"
+        print '################################################################'
         #print repr(request)
-        #print "################################################################"
+        #print '################################################################'
 
 
 ###################
@@ -65,7 +66,7 @@ class TestMiddleware(object):
 class UtilsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.login = "test_login"
+        self.login = 'test_login'
         self.password = 'test_pass1234'
 
         self.text = '<a href="http://test.com">test.com</a><div><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\'</div> @omarish @tehcrowd_test'
