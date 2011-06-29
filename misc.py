@@ -13,6 +13,9 @@ from django.utils.encoding import smart_str
 
 from django.conf import settings
 
+class CustomError(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
 
 def custom_slugify(slug=None, name=None, length=16, num_words=2):
     if slug and len(slug):
@@ -129,7 +132,7 @@ def clean_filename(f):
         except IndexError: extension = 'png'
         f.name = custom_slugify(f.name.rsplit('.', 1)[0]) + '.' + extension
     return f
-    
+
 
 def get_lat_long(location):
     key = settings.GOOGLE_API_KEY
@@ -141,7 +144,7 @@ def get_lat_long(location):
         dlist = data.split(',')
     except IOError:
         dlist = None
-                
+
     if dlist and dlist[0] == '200':
         return {'lat':float(dlist[2]), 'lon':float(dlist[3])}
     else:
