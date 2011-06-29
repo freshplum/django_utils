@@ -4,9 +4,9 @@ from django.utils.safestring import mark_safe
 
 try:
     from BeautifulSoup import BeautifulSoup, Comment
-except:
+except ImportError:
     pass
-    
+
 def strip(s, all_tags=None):
     valid_tags = ('strong b a i'.split() if not all_tags else '')
     valid_attrs = ('href src'.split() if not all_tags else '')
@@ -26,7 +26,7 @@ def convert_links(s):
     ##Find links that aren't already active (hyperlinked) and turn into hyperlink
     URL_regex = re.compile(r'(|^)http([\w\d\.\:\/]+?)(\s|$|\:|,)', re.IGNORECASE)
     s = URL_regex.sub(r'\1<a href="http\2">http\2</a>\3', s)
-    
+
     URL_regex = re.compile(r'(\s|^)@([\w\d_]+)', re.IGNORECASE)
     s = URL_regex.sub(r'\1<a href="http://twitter.com/\2/">@\2</a>', s)
     return mark_safe(s)
