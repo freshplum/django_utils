@@ -8,8 +8,7 @@ from cachebot.managers import CacheBotManager
 from cachebot.queryset import CachedQuerySet
 
 #Simple GET caching.  Cribbed from http://www.eflorenzano.com/blog/post/drop-dead-simple-django-caching/
-#CacheBot?.
-
+#Count caching
 
 
 def key_from_instance(instance):
