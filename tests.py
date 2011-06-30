@@ -1,9 +1,15 @@
+import logging
+logger = logging.getLogger(__name__)
+
 #From Python:
+try:
+    from BeautifulSoup import BeautifulSoup, Comment
+except ImportError:
+    BeautifulSoup = None
+
 import string
 from random import choice
 from datetime import datetime, date, timedelta
-import logging
-logger = logging.getLogger(__name__)
 
 from django.test import TestCase
 from django.test.client import Client
@@ -70,8 +76,8 @@ class UtilsTestCase(TestCase):
         self.password = 'test_pass1234'
 
         self.text = '<a href="http://test.com">test.com</a><div><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\'</div> @omarish @tehcrowd_test'
-        self.stripped_text = '<a href="http://test.com">test.com</a><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\' @omarish @tehcrowd_test'
         self.convert_links_text = '<a href="http://test.com">test.com</a><div><strong>this <i>is</i> a div</strong> <a href="http://google.com">http://google.com</a>: <a href="http://msn.com">http://msn.com</a>, <a href="http://yahoo.com">http://yahoo.com</a> <a href="http://example.com">http://example.com</a> \'http://tehcrowd.com\'</div> <a href="http://twitter.com/omarish/">@omarish</a> <a href="http://twitter.com/tehcrowd_test/">@tehcrowd_test</a>'
+        self.stripped_text = '<a href="http://test.com">test.com</a><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\' @omarish @tehcrowd_test'
 
     def testShortenStrong(self):
         print '\nutils > misc.py > test shorten_string'
@@ -90,7 +96,10 @@ class UtilsTestCase(TestCase):
 
     def testStripHtml(self):
         print '\nutils > manage_html.py > test strip()'
-        self.assertEqual(strip(self.text), self.stripped_text)
+        if BeautifulSoup:
+            self.assertEqual(strip(self.text), self.stripped_text)
+        else:
+            print '\nutils > manage_html.py: BEAUTIFUL SOUP NOT INSTALLED'
 
     def testSerializeObject(self):
         print '\nnutils > misc.py >  test serialize_object'
