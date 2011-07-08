@@ -149,3 +149,35 @@ def get_lat_long(location):
         return {'lat':float(dlist[2]), 'lon':float(dlist[3])}
     else:
         return None
+
+def domain_is_blocked(d):
+    blocked_domains = (
+        '@asdf',
+        '@test',
+        '@spam.la',
+        '@spammotel.com',
+        '@kasmail.com',
+        '@spamfree24.org',
+        '@tempemail.net',
+        '@10minutemail.com',
+        '@guerrillamail.org',
+        '@jetable.org',
+        '@maileater.com',
+        '@temporaryinbox.com',
+        '@mailexpire.com',
+        '@mytrashmail.com',
+        '@mt2009.com',
+        '@mt2010.com',
+        '@mailinator',
+        '@sogetthis',
+        '@thisisnotmyrealemail',
+        '@spamherelots',
+        '@mailin8r',
+        '@bouncr.com',
+    )
+    flagged = False
+
+    for b in blocked_domains:
+        if b in d:
+            flagged = True
+    return flagged
