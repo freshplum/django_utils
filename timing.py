@@ -17,8 +17,8 @@ class GhettoTimer(object):
         start_time = time.time()
         response = self.orig_func(*args, **kwargs)
         delta = time.time()-start_time
-        holy_shit = '\n=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!='+\
-                    '!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!\n'
+        holy_shit = '\n=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=\
+                     !=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!\n'
         msg = "Time to execute %s (%s): %s seconds" % (self.orig_func.__name__,
                                                        inspect.getsourcefile(self.orig_func),
                                                        round(delta, 4))
