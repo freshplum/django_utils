@@ -2,24 +2,31 @@ import re
 
 from django.utils.safestring import mark_safe
 
-try:
-    from BeautifulSoup import BeautifulSoup, Comment
-except ImportError:
-    pass
 
 def strip(s, all_tags=None):
+    try:
+        from BeautifulSoup import BeautifulSoup, Comment
+        soup = BeautifulSoup(s)
+    except ImportError:
+        soup = None
+
     valid_tags = ('strong b a i'.split() if not all_tags else '')
     valid_attrs = ('href src'.split() if not all_tags else '')
-    soup = BeautifulSoup(s)
-    for Comment in soup.findAll(
-        text=lambda text: isinstance(text, Comment)):
-        comment.extract()
-    for tag in soup.findAll(True):
-        if tag.name not in valid_tags:
-            tag.hidden = True
-        tag.attrs = [(attr, val) for attr, val in tag.attrs
-                    if attr in valid_attrs]
-    return soup.renderContents().decode('utf8').replace('javascript:', '')
+
+    if soup:
+        for Comment in soup.findAll(
+            text=lambda text: isinstance(text, Comment)):
+            comment.extract()
+        for tag in soup.findAll(True):
+            if tag.name not in valid_tags:
+                tag.hidden = True
+            tag.attrs = [(attr, val) for attr, val in tag.attrs
+                        if attr in valid_attrs]
+        ret = soup.renderContents().decode('utf8').replace('javascript:', '')
+    else:
+        ret = "Could not load BeautifulSoup"
+
+    return ret
 
 def convert_links(s):
     #NOTE: TEXT MUST ALREDY BE ESCAPED...
