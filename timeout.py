@@ -1,10 +1,13 @@
 import signal
+from django.conf import settings
+
 from misc import CustomError
 
 def handler(signum, frame):
     raise CustomError("Timeout")
 
-signal.signal(signal.SIGALRM, handler)
+if not settings.DEBUG:
+    signal.signal(signal.SIGALRM, handler)
 
 def run_func(timeout, func, *args, **kwargs):
     """
