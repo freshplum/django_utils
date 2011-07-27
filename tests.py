@@ -62,13 +62,8 @@ class TestMiddleware(object):
         print '######################## Exception #############################'
         print '\n'.join(traceback.format_exception(*(exc_info or sys.exc_info())))
         print '################################################################'
-        #print repr(request)
-        #print '################################################################'
 
 
-###################
-# utils.py tests #
-##################
 class UtilsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -80,7 +75,6 @@ class UtilsTestCase(TestCase):
         self.stripped_text = '<a href="http://test.com">test.com</a><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\' @omarish @tehcrowd_test'
 
     def testShortenStrong(self):
-        print '\nutils > misc.py > test shorten_string'
         n = 1
         chars = string.letters + string.digits + '!@#$%^&*() _-"][{.`~}'
         while n < 33:
@@ -91,16 +85,10 @@ class UtilsTestCase(TestCase):
             n += 1
 
     def testConvertLinks(self):
-        print '\nutils > manage_html.py > test convert_links()'
         self.assertEqual(convert_links(self.text), self.convert_links_text)
 
     def testStripHtml(self):
-        print '\nutils > manage_html.py > test strip()'
         if BeautifulSoup:
             self.assertEqual(strip(self.text), self.stripped_text)
         else:
             print '\nutils > manage_html.py: BEAUTIFUL SOUP NOT INSTALLED'
-
-    def testSerializeObject(self):
-        print '\nnutils > misc.py >  test serialize_object'
-        #Haven't yet bothered to teset this...

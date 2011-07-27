@@ -19,7 +19,3 @@ def run_func(timeout, func, *args, **kwargs):
     result = func(*args, **kwargs)
     signal.setitimer(signal.ITIMER_REAL, 0)
     return result
-
-def infinite_loop():
-    while True:
-        print 'test'
