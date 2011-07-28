@@ -9,6 +9,11 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 class GhettoTimer(object):
+    """
+    This is a decoartor that provides timing at a function level.
+
+    """
+
     def __init__(self, orig_func):
         self.__name__ = 'GhettoTimer'
         self.orig_func = orig_func
@@ -34,3 +39,20 @@ class GhettoTimer(object):
         elif delta > 0.01:
             logger.info(msg)
         return response
+
+#Use or extend GhettoTimer class
+#tt = None
+#def timer(desc = '', begin = False):
+#    return None
+#    global tt
+#    if begin:
+#        tt = None
+#    if not tt:
+#        tt = time()
+#        lapse = 0
+#    else:
+#        last = tt
+#        tt = time()
+#        lapse = tt - last
+#    print "%s %s" % (desc, lapse)
+#    return lapse
