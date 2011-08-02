@@ -55,14 +55,6 @@ class TestMiddleware(object):
         TestMiddleware.show_sql(connection, show_all = SHOW_QUERIES)
         return response
 
-    def process_exception(self, request, exception):
-        import traceback
-        import sys
-        exc_info = sys.exc_info()
-        print '######################## Exception #############################'
-        print '\n'.join(traceback.format_exception(*(exc_info or sys.exc_info())))
-        print '################################################################'
-
 
 class UtilsTestCase(TestCase):
     def setUp(self):
@@ -91,4 +83,4 @@ class UtilsTestCase(TestCase):
         if BeautifulSoup:
             self.assertEqual(strip(self.text), self.stripped_text)
         else:
-            print '\nutils > manage_html.py: BEAUTIFUL SOUP NOT INSTALLED'
+            logger.info('\nutils > manage_html.py: BEAUTIFUL SOUP NOT INSTALLED')
