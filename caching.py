@@ -4,9 +4,6 @@ from django.db.models.signals import post_save, pre_delete
 from django.db.models.query import QuerySet
 from django.db import models
 
-from cachebot.managers import CacheBotManager
-from cachebot.queryset import CachedQuerySet
-
 #Simple GET caching.  Cribbed from http://www.eflorenzano.com/blog/post/drop-dead-simple-django-caching/
 #Count caching
 
