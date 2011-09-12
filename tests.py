@@ -42,11 +42,11 @@ class TestMiddleware(object):
     def show_sql(connection, show_all = False):
         time = 0
         count = 0
-        for q in connection.queries:
+        for query in connection.queries:
             if show_all:
                 logger.info('%s\n' % q)
             count += 1
-            time += float(q['time'])
+            time += float(query.get('duration', 0))
         if count > 0:
             logger.info('Total Queries: %s' % str(count))
             logger.info('Total Time: %s' % str(time))
