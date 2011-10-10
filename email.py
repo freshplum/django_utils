@@ -4,7 +4,7 @@ from django.conf import settings
 try:
     from django.conf import EMAIL_TEMPLATE_ROOT
 except ImportError:
-    EMAIL_TEMPLATE_ROOT = 'core/emails'
+    EMAIL_TEMPLATE_ROOT = 'www/emails'
 
 class Email(object):
     """
