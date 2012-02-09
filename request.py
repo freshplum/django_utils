@@ -14,7 +14,7 @@ def get_ip(request):
     else:
         return request.META['REMOTE_ADDR']
 
-def get_GET(request):
+def get_GET(request, BASE64='base64'):
     """
     Given a request, this decodes the base64 attributes (if they exist)
     """
