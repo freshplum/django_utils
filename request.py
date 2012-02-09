@@ -1,3 +1,6 @@
+import simplejson
+import base64
+
 def get_ip(request):
     """
     Get the appropriate IP address of a request object.
