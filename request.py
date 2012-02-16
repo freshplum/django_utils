@@ -1,5 +1,7 @@
 import simplejson
 import base64
+from django.core.mail import mail_managers
+
 
 def get_ip(request):
     """
@@ -19,7 +21,13 @@ def get_GET(request, BASE64='base64'):
     Given a request, this decodes the base64 attributes (if they exist)
     """
     if BASE64 in request.GET:
-        get = simplejson.loads(base64.decodestring(request.GET.get(BASE64, '')))
+        try:
+            get = simplejson.loads(base64.decodestring(request.GET.get(BASE64, '')))
+        except Exception as inst:
+            error = str(inst) + ' \n\n ' + str(request)
+            mail_managers('Base64 decode error', error)
+            return {}
+
         for key, value in request.GET.items():
             if key != BASE64:
                 get[key] = value
