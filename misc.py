@@ -174,6 +174,15 @@ def domain_is_blocked(d):
         '@spamherelots',
         '@mailin8r',
         '@bouncr.com',
+        '@email-masking',
+        '@spaml',
+        '@guerrillamail.com',
+        '@mailmoat',
+        '@sneakemail',
+        '@spamgourmet',
+        '@spamex',
+        '@emailias.com',
+        '@freshplum.com',
     )
     flagged = False
 
