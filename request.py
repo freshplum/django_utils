@@ -25,7 +25,7 @@ def get_GET(request, BASE64='base64'):
         try:
             get = simplejson.loads(base64.decodestring(request.GET.get(BASE64, '')))
         except Exception as inst:
-            logger.error('Error in base64 padding\n %s' % str(inst))
+            #logger.error('Error in base64 padding\n %s' % str(inst))
             raise ValueError
         for key, value in request.GET.items():
             if key != BASE64:
