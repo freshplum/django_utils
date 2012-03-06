@@ -32,7 +32,14 @@ def get_GET(request, BASE64='base64'):
                 get[key] = value
         return get
     else:
-        return request.GET.copy()
+        raw = request.GET.copy()
+        d = {}
+        for k,v in raw.items():
+            try:
+                d[k] = simplejson.loads(v)
+            except simplejson.JSONDecodeError:
+                d[k] = str(v)
+        return d
 
 def get_os(request):
     s = request.META.get('HTTP_USER_AGENT', '')
