@@ -20,7 +20,7 @@ class MemcachedClass(object):
             key += ('_%s' % self.get_ckey_uid)
         return key
 
-class MemcachedProperty(object):
+class memcached_property(object):
     """
     Decorator that creates a property that caches its value in memcached
     """
