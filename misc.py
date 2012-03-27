@@ -182,7 +182,6 @@ def domain_is_blocked(d):
         '@spamgourmet',
         '@spamex',
         '@emailias.com',
-        '@freshplum.com',
     )
     flagged = False
 
