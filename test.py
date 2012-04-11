@@ -11,7 +11,7 @@ import string
 from random import choice
 from datetime import datetime, date, timedelta
 
-from django.test import TestCase
+import django.test
 from django.test.client import Client
 from django.core.exceptions import MiddlewareNotUsed
 from django.db import connection
@@ -54,6 +54,15 @@ class TestMiddleware(object):
     def process_response(self, request, response):
         TestMiddleware.show_sql(connection, show_all = SHOW_QUERIES)
         return response
+
+
+class TestCase(django.test.TestCase):
+    """
+    Common base class for all Freshplum unit tests to inherit from.
+    """
+
+    multi_db = True
+    """Flag to make sure that Django properly loads fixtures for every database"""
 
 
 class UtilsTestCase(TestCase):
