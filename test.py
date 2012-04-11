@@ -63,33 +63,3 @@ class TestCase(django.test.TestCase):
 
     multi_db = True
     """Flag to make sure that Django properly loads fixtures for every database"""
-
-
-class UtilsTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.login = 'test_login'
-        self.password = 'test_pass1234'
-
-        self.text = '<a href="http://test.com">test.com</a><div><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\'</div> @omarish @tehcrowd_test'
-        self.convert_links_text = '<a href="http://test.com">test.com</a><div><strong>this <i>is</i> a div</strong> <a href="http://google.com">http://google.com</a>: <a href="http://msn.com">http://msn.com</a>, <a href="http://yahoo.com">http://yahoo.com</a> <a href="http://example.com">http://example.com</a> \'http://tehcrowd.com\'</div> <a href="http://twitter.com/omarish/">@omarish</a> <a href="http://twitter.com/tehcrowd_test/">@tehcrowd_test</a>'
-        self.stripped_text = '<a href="http://test.com">test.com</a><strong>this <i>is</i> a div</strong> http://google.com: http://msn.com, http://yahoo.com http://example.com \'http://tehcrowd.com\' @omarish @tehcrowd_test'
-
-    def testShortenStrong(self):
-        n = 1
-        chars = string.letters + string.digits + '!@#$%^&*() _-"][{.`~}'
-        while n < 33:
-            s = ''
-            for i in range(32):
-                s = s + choice(chars)
-            self.assertEqual(len(shorten_string(s, n)), n)
-            n += 1
-
-    def testConvertLinks(self):
-        self.assertEqual(convert_links(self.text), self.convert_links_text)
-
-    def testStripHtml(self):
-        if BeautifulSoup:
-            self.assertEqual(strip(self.text), self.stripped_text)
-        else:
-            logger.info('\nutils > manage_html.py: BEAUTIFUL SOUP NOT INSTALLED')
