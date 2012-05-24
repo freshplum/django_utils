@@ -57,3 +57,16 @@ def get_os(request):
         return 'linux'
     else:
         return None
+
+def get_browser(request):
+    s = request.META.get('HTTP_USER_AGENT', '')
+    if s.find('Chrome') != -1:
+        return 'Chrome'
+    if s.find('Firefox') != -1:
+        return 'Firefox'
+    if s.find('MSIE') != -1:
+        return 'Internet Explorer'
+    if s.find('Safari') != -1:
+        return 'Safari'
+    else:
+        return None
