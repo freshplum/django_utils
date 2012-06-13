@@ -4,8 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class QuerySetManager(models.Manager):
     # http://docs.djangoproject.com/en/dev/topics/db/managers/#using-managers-for-related-object-access
-    # Not working cause of:
-    # http://code.djangoproject.com/ticket/9643
+
     use_for_related_fields = True
 
     def __init__(self, qs_class=models.query.QuerySet):
@@ -39,6 +38,10 @@ class BetterQuerySet(QuerySet):
     """
 
     def get(self, **kwargs):
+        """
+        Like a regular get, except one can pass in a default value as
+        a second kwarg.
+        """
         if len(kwargs) > 1 and 'default' in kwargs:
             d = kwargs.pop('default')
             try:
