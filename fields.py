@@ -54,7 +54,7 @@ class JSONField(models.TextField):
             return None
 
         if isinstance(value, dict):
-            value = simplejson.dumps(value, cls=DjangoJSONEncoder)
+            value = simplejson.dumps(value)
 
         # TODO: If the value is a string, make sure it is valid JSON before saving it
 
