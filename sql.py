@@ -6,6 +6,12 @@ def select_sql(sql, db='tron'):
     transaction.commit_unless_managed(using=db)
     return dictfetchall(cursor)
 
+def cursor_sql(sql, db='tron'):
+    cursor = connections[db].cursor()
+    cursor.execute(sql)
+    transaction.commit_unless_managed(using=db)
+    return cursor
+
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
     desc = cursor.description
