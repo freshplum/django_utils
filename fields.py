@@ -1,5 +1,6 @@
 import simplejson
 from django.db import models
+from django.core.serializers.json import DjangoJSONEncoder
 
 class ManyToManyJSONField(models.Field):
 
@@ -48,7 +49,7 @@ class JSONField(models.TextField):
 
         return value
 
-    def get_db_prep_save(self, value):
+    def get_db_prep_save(self, value, **kwargs):
         """Convert our JSON object to a string before we save"""
         if value == "":
             return None
@@ -58,4 +59,4 @@ class JSONField(models.TextField):
 
         # TODO: If the value is a string, make sure it is valid JSON before saving it
 
-        return super(JSONField, self).get_db_prep_save(value)
+        return super(JSONField, self).get_db_prep_save(value, **kwargs)
