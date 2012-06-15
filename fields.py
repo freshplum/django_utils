@@ -49,14 +49,14 @@ class JSONField(models.TextField):
 
         return value
 
-    def get_db_prep_save(self, value, **kwargs):
+
+    def get_db_prep_save(self, value, connection):
         """Convert our JSON object to a string before we save"""
         if value == "":
             return None
 
         if isinstance(value, dict):
-            value = simplejson.dumps(value, cls=DjangoJSONEncoder)
+            value = simplejson.dumps(value)
 
         # TODO: If the value is a string, make sure it is valid JSON before saving it
-
-        return super(JSONField, self).get_db_prep_save(value, **kwargs)
+        return super(JSONField, self).get_db_prep_save(value, connection)
