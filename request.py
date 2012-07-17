@@ -52,7 +52,6 @@ def get_os_browser(request):
     browser = get_browser(ua)
 
     ua_info = httpagentparser.detect(ua)
-    print ua_info
     return {
         'os': {
             'type': get_os(ua),
