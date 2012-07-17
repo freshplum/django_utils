@@ -1,6 +1,10 @@
 import simplejson
 import base64
 import logging
+import re
+
+import httpagentparser
+
 from django.core.mail import mail_managers
 logger = logging.getLogger(__name__)
 
@@ -41,32 +45,58 @@ def get_GET(request, BASE64='base64'):
                 d[k] = str(v)
         return d
 
-def get_os(request):
-    s = request.META.get('HTTP_USER_AGENT', '')
-    if s.find('iPhone') != -1:
+def get_os_browser(request):
+    ua = request.META.get('HTTP_USER_AGENT', '')
+
+    os = get_os(ua)
+    browser = get_browser(ua)
+
+    ua_info = httpagentparser.detect(ua)
+    print ua_info
+    return {
+        'os': {
+            'type': get_os(ua),
+            'vsn': major_minor(ua_info['os'].get('version', ''))
+        },
+        'browser': {
+            'type': get_browser(ua),
+            'vsn': major_minor(ua_info['browser'].get('version', ''))
+        }
+    }
+
+
+MAJOR_MINOR_RE = re.compile(r'(?:^| )(\d+)\.?(\d+)?')
+def major_minor(vsn):
+    m = MAJOR_MINOR_RE.match(vsn)
+    if m:
+        return m.groups()
+    else:
+        vsn
+
+def get_os(ua):
+    if ua.find('iPhone') != -1:
         return 'iphone'
-    if s.find('iPad') != -1:
+    if ua.find('iPad') != -1:
         return 'ipad'
-    if s.find('Android') != -1:
+    if ua.find('Android') != -1:
         return 'android'
-    elif s.find('Macintosh') != -1:
+    elif ua.find('Macintosh') != -1:
         return 'mac'
-    elif s.find('Windows') != -1:
+    elif ua.find('Windows') != -1:
         return 'windows'
-    elif s.find('Linux') != -1:
+    elif ua.find('Linux') != -1:
         return 'linux'
     else:
         return None
 
-def get_browser(request):
-    s = request.META.get('HTTP_USER_AGENT', '')
-    if s.find('Chrome') != -1:
+def get_browser(ua):
+    if ua.find('Chrome') != -1:
         return 'Chrome'
-    if s.find('Firefox') != -1:
+    if ua.find('Firefox') != -1:
         return 'Firefox'
-    if s.find('MSIE') != -1:
+    if ua.find('MSIE') != -1:
         return 'Internet Explorer'
-    if s.find('Safari') != -1:
+    if ua.find('Safari') != -1:
         return 'Safari'
     else:
         return None
