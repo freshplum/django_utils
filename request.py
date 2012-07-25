@@ -55,11 +55,11 @@ def get_os_browser(request):
     return {
         'os': {
             'type': get_os(ua),
-            'vsn': major_minor(ua_info['os'].get('version', ''))
+            'vsn': major_minor(ua_info.get('os', {}).get('version', ''))
         },
         'browser': {
             'type': get_browser(ua),
-            'vsn': major_minor(ua_info['browser'].get('version', ''))
+            'vsn': major_minor(ua_info.get('browser', {}).get('version', ''))
         }
     }
 
