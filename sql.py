@@ -1,12 +1,12 @@
 from django.db import connections, transaction, backend
 
-def select_sql(sql, db='tron'):
+def select_sql(sql, db='data'):
     cursor = connections[db].cursor()
     cursor.execute(sql)
     transaction.commit_unless_managed(using=db)
     return dictfetchall(cursor)
 
-def cursor_sql(sql, db='tron'):
+def cursor_sql(sql, db='data'):
     cursor = connections[db].cursor()
     cursor.execute(sql)
     transaction.commit_unless_managed(using=db)
