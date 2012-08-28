@@ -17,9 +17,10 @@ def get_ip(request):
     as a different property
     """
     if 'HTTP_X_FORWARDED_FOR' in request.META:
-        return request.META['HTTP_X_FORWARDED_FOR']
+        ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
-        return request.META['REMOTE_ADDR']
+        ip = request.META['REMOTE_ADDR']
+    return (ip + ',').split(',')[0]
 
 def get_GET(request, BASE64='base64'):
     """
