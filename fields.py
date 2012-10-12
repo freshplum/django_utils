@@ -1,6 +1,20 @@
+import inspect
+import re
 import simplejson
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
+
+class GenChoice:
+    hidden_pat = re.compile(r'__\w+__')
+
+    @classmethod
+    def choices(cls):
+        fn = lambda x: (isinstance(x[1], str) or\
+                        isinstance(x[1], int) or\
+                        isinstance(x[1], float))\
+                   and (not GenChoice.hidden_pat.match(x[0]))
+        return filter(fn, inspect.getmembers(cls))
+
 
 class ManyToManyJSONField(models.Field):
 
