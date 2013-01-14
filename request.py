@@ -103,4 +103,4 @@ def get_browser(ua):
         return None
 
 def is_mobile(ua):
-    return get_os(ua).lower() in ['iphone', 'android',]
+    return (get_os(ua) or '').lower() in ['iphone', 'android',]
