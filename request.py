@@ -61,7 +61,8 @@ def get_os_browser(request):
         'browser': {
             'type': get_browser(ua),
             'vsn': major_minor(ua_info.get('browser', {}).get('version', ''))
-        }
+        },
+        'is_mobile': is_mobile(ua),
     }
 
 
@@ -100,3 +101,6 @@ def get_browser(ua):
         return 'Safari'
     else:
         return None
+
+def is_mobile(ua):
+    return get_os(ua).lower() in ['iphone', 'android',]
