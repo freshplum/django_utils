@@ -33,11 +33,14 @@ def get_GET(request, BASE64='base64'):
             # convert to ascii
             encoded.encode('ascii', 'ignore')
 
+            # decode from base64
+            decoded = base64.decodestring(encoded)
+
             # replace invalid json
-            encoded.replace('undefined', 'null')
+            decoded.replace('undefined', 'null')
 
             # decode json
-            get = simplejson.loads(base64.decodestring(encoded))
+            get = simplejson.loads(decoded)
         except Exception as inst:
             print inst
             logger.error('Error in base64 padding\n%s\n%s\n%s' % (inst, request.GET.get(BASE64), request))
